@@ -1,8 +1,9 @@
 import Head from 'next/head'
-import StitchesLogo from '../components/StitchesLogo'
 import { styled } from '../stitches.config'
-
-const Box = styled('div', {})
+import { Box } from '../components/box'
+import { VideoForm } from '../components/video-form'
+import { Output } from '../components/output'
+import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '../components/tabs'
 
 const Text = styled('p', {
   fontFamily: '$system',
@@ -16,8 +17,13 @@ const Link = styled('a', {
 })
 
 const Container = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  height: '100vh',
+  marginY: 0,
   marginX: 'auto',
   paddingX: '$3',
+  paddingY: 0,
 
   variants: {
     size: {
@@ -38,15 +44,27 @@ export default function Home() {
   return (
     <Box css={{ paddingY: '$6' }}>
       <Head>
-        <title>Use Stitches with Next.js</title>
+        <title>Youtube Transcription &amp; Spanish Translation</title>
       </Head>
       <Container size={{ '@initial': '1', '@bp1': '2' }}>
-        <StitchesLogo />
-        <Text as="h1">Hello, from Stitches.</Text>
-        <Text>
-          For full documentation, visit{' '}
-          <Link href="https://stitches.dev">stitches.dev</Link>.
-        </Text>
+        <Text as="h1">Youtube Transcription &amp; Spanish Translation</Text>
+        <VideoForm />
+        <TabsRoot defaultValue='progress'>
+          <TabsList aria-label='Output'>
+            <TabsTrigger value='progress'>Progress</TabsTrigger>
+            <TabsTrigger value='result'>Result</TabsTrigger>
+          </TabsList>
+          <TabsContent value='progress'>
+            <Output>
+              This is progress!
+            </Output>
+          </TabsContent>
+          <TabsContent value='result'>
+            <Output>
+              These are results!
+            </Output>
+          </TabsContent>
+        </TabsRoot>
       </Container>
     </Box>
   )
