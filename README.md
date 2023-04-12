@@ -1,27 +1,38 @@
-# Stitches Example
+# Youtube Music Subtitler
 
-This example shows how to use the [Stitches CSS-in-JS Library](https://github.com/modulz/stitches).
+A subtitle generator and translator powered by the OpenAI API.
 
-## Deploy your own
+Transcribes songs from audio and translates from english to brazilian portuguese, while trying to maintain same vibe and rhythm as the original. 
+To use it, it's as simple as providing the url for the youtube video of the music and press start. This will generate the translated audio transcription text formatted like a SubRip(srt) file, ready to use as a subtitle.
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example) or preview live with [StackBlitz](https://stackblitz.com/github/vercel/next.js/tree/canary/examples/with-stitches)
+It has a web UI built in TypeScript with Next.js, and the requests to the API and most of the heavy lifting is done in Python.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-stitches&project-name=with-stitches&repository-name=with-stitches)
 
+
+## Ingredients
+
+- Python and pip
+  - [pysrt](https://github.com/byroot/pysrt) - Python parser for subrip (srt files)
+  - [yt-dlp](https://github.com/yt-dlp/yt-dlp) - A youtube-dl fork with additional features and fixes
+  - [openai](https://github.com/openai/openai-python) - The OpenAI Python Library provides easy access to the OpenAI API
+- [Next.js](https://github.com/vercel/next.js)
+- [Radix UI](https://www.radix-ui.com) - Unstyled, accessible components for building high-quality design systems and web apps in React
+- [Stitches](https://github.com/stitchesjs/stitches) - CSS-in-JS Library
 ## How to use
 
-Execute [Create Next App](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init) or [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/) to bootstrap the example:
+1. Get an OpenAI API Key [here](https://platform.openai.com/account/api-keys)
+2. Create a .env file based on the .env.example file, and add your API Key
+3. Run the following commands
 
 ```bash
-npx create-next-app --example with-stitches with-stitches-app
+pip install -r requirements.txt
+npm i
+npm run dev
 ```
 
-```bash
-yarn create next-app --example with-stitches with-stitches-app
-```
+4. App is running on [localhost](http://localhost:3000)
 
-```bash
-pnpm create next-app --example with-stitches with-stitches-app
-```
 
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+#### Credits
+
+This project is heavily inspired on craftdogz
