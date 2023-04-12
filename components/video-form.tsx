@@ -100,7 +100,7 @@ const Button = styled('button', {
     backgroundColor: '$purple500',
     color: 'white',
     boxShadow: `0 2px 10px $gray400`,
-    '&:hover': { backgroundColor: '$purple600' },
-    '&:focus': { boxShadow: `0 0 0 2px black` },
+    '&:not(:disabled):hover': { backgroundColor: '$purple600' },
+    '&:not(:disabled):focus': { boxShadow: `0 0 0 2px black` },
 })
 

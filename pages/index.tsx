@@ -4,6 +4,8 @@ import { Box } from '../components/box'
 import { VideoForm } from '../components/video-form'
 import { Output } from '../components/output'
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '../components/tabs'
+import { useState } from 'react'
+import { extractVideoIdFromUrl, processVideo } from '../utils/api-client'
 
 const Text = styled('p', {
   fontFamily: '$system',
@@ -41,6 +43,35 @@ const Container = styled('div', {
 })
 
 export default function Home() {
+
+  const [isProcessing, setProcessing] = useState(false)
+  const [progressOutput, setProgressOutput] = useState('')
+  const [activeTab, setActiveTab] = useState('progress')
+  const [resultOutput, setResultOutput] = useState('')
+
+  const handleStartProcessing = async (videoUrl: string) => {
+    const videoId = extractVideoIdFromUrl(videoUrl)
+    console.log('videoId:', videoId)
+    if (typeof videoId === 'string') {
+      setResultOutput('')
+      setProcessing(true)
+
+      // todo
+      const spanishSubs = await processVideo(videoId, message => {
+        setProgressOutput(prev => prev + message)
+      })
+      if (spanishSubs) {
+        setResultOutput(spanishSubs)
+        setActiveTab('result')
+      }
+
+      setProcessing(false)
+    } else {
+      alert('Invalid URL')
+    }
+  }
+
+
   return (
     <Box css={{ paddingY: '$6' }}>
       <Head>
@@ -48,20 +79,23 @@ export default function Home() {
       </Head>
       <Container size={{ '@initial': '1', '@bp1': '2' }}>
         <Text as="h1">Youtube Transcription &amp; Spanish Translation</Text>
-        <VideoForm />
-        <TabsRoot defaultValue='progress'>
+        <VideoForm
+          onSubmit={handleStartProcessing}
+          isProcessing={isProcessing}
+        />
+        <TabsRoot value={activeTab} onValueChange={setActiveTab}>
           <TabsList aria-label='Output'>
             <TabsTrigger value='progress'>Progress</TabsTrigger>
             <TabsTrigger value='result'>Result</TabsTrigger>
           </TabsList>
           <TabsContent value='progress'>
             <Output>
-              This is progress!
+              {progressOutput}
             </Output>
           </TabsContent>
           <TabsContent value='result'>
             <Output>
-              These are results!
+              {resultOutput}
             </Output>
           </TabsContent>
         </TabsRoot>
