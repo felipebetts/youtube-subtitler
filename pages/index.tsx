@@ -56,7 +56,6 @@ export default function Home() {
       setResultOutput('')
       setProcessing(true)
 
-      // todo
       const spanishSubs = await processVideo(videoId, message => {
         setProgressOutput(prev => prev + message)
       })
