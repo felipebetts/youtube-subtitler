@@ -9,10 +9,94 @@ export async function processVideo(
     callback: ProgressCallback
 ): Promise<string | false> {
     callback('Downloading audio...\n')
-    callback('Progress 1 \n')
-    callback('Progress 2 \n')
-    callback('Progress 3 \n')
-    callback('Progress 4 \n')
+    await downloadAudio(videoId, callback)
 
-    return 'result'
+    callback('\nTranscribing audio. This takes a while...\n')
+    const srt = await transcribe(videoId, callback)
+
+    if (srt) {
+        callback('\nTranslating text...\n')
+        const result = await translate(srt, callback)
+        callback('\nDone!\n')
+        return result
+    }
+
+    return false
+}
+
+export async function downloadAudio(
+    videoId: string,
+    onProgress: ProgressCallback
+) {
+    const res = await fetch(`/api/audio?${new URLSearchParams({ video_id: videoId })}`)
+    const reader = res.body?.getReader()
+
+    if (reader) {
+        return streamResponse(reader, onProgress)
+    } else {
+        return false
+    }
+}
+
+export async function transcribe(
+    videoId: string,
+    onProgress: ProgressCallback
+): Promise<string | false> {
+    const res = await fetch(`/api/transcribe?${new URLSearchParams({ video_id: videoId })}`)
+    const reader = res?.body?.getReader()
+
+    if (reader) {
+        return streamResponse(reader, onProgress)
+    } else {
+        return false
+    }
+}
+
+export async function translate(
+    srtData: string,
+    onProgress: ProgressCallback
+): Promise<string | false> {
+    const res = await fetch('/api/translate', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'text/plain; charset=utf-8'
+        },
+        body: srtData
+    })
+    const reader = res?.body?.getReader()
+
+    if (reader) {
+        const result = await streamResponse(reader, onProgress)
+        return result
+            .split('\n')
+            .filter(line => !line.startsWith('[Error]'))
+            .join('\n')
+    } else {
+        return false
+    }
+}
+
+async function streamResponse(
+    reader: ReadableStreamDefaultReader<Uint8Array>,
+    onProgress: ProgressCallback
+): Promise<string> {
+    return new Promise(resolve => {
+        const decoder = new TextDecoder()
+        let result = ''
+        const readChunk = ({
+            done, value
+        }: ReadableStreamReadResult<Uint8Array>) => {
+            if (done) {
+                resolve(result)
+                return
+            }
+
+            const output = decoder.decode(value)
+            result += output
+            onProgress(output)
+            reader.read().then(readChunk)
+        }
+
+        reader.read().then(readChunk)
+    })
 }
