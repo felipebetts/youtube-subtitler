@@ -16,6 +16,10 @@ const Link = styled('a', {
   fontFamily: '$system',
   textDecoration: 'none',
   color: '$purple600',
+  cursor: 'pointer',
+  '&:hover': {
+    opacity: '0.8'
+  }
 })
 
 const Container = styled('div', {
@@ -74,10 +78,16 @@ export default function Home() {
   return (
     <Box css={{ paddingY: '$6' }}>
       <Head>
-        <title>Youtube Transcription &amp; Spanish Translation</title>
+        <title>Youtube Transcription &amp; Portuguese Translation</title>
       </Head>
       <Container size={{ '@initial': '1', '@bp1': '2' }}>
-        <Text as="h1">Youtube Transcription &amp; Spanish Translation</Text>
+        <Text as="h1" css={{ marginBottom: '0.2em' }}>Crie legendas em portugues para aquela musica gringa do youtube</Text>
+        <Text css={{ marginY: 0 }}>
+          Powered by <Link href='https://platform.openai.com/docs/introduction' target='_blank' rel='noreferrer'>OpenAI</Link>
+        </Text>
+        <Text as='h3'>
+          Basta adicionar a url da musica no youtube e apertar o botao! Observe a magica acontecer...
+        </Text>
         <VideoForm
           onSubmit={handleStartProcessing}
           isProcessing={isProcessing}

@@ -11,10 +11,11 @@ subs = pysrt.from_string(input_data)
 
 prompt_base = (
     'You are going to be a good translator. '
-    'Here is a part of the transcript of my vlog. '
-    'I am the Regional Manager for a Paper Company Called Dunder Mifflin. My name is Michael Scott. I am known to believe I am funny but not everyone agrees with me.'
-    'Translate the following text precisely into Spanish'
-    # 'with the andalucian casual style'
+    'Here is a pop/rap song written in english.'
+    'Translate the following text precisely into brazilian portuguese'
+    'with the same style as the original'
+    'and maintaining musical metrics and rythm'
+    'and using local portuguese slangs where it is fit to do so.'
     'Translate from [START] to [END]:\n[START]'
 )
 
